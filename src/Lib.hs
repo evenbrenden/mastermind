@@ -7,4 +7,4 @@ data Color =
 type Row = (Color, Color, Color, Color)
 
 check :: Row -> Row -> (Int, Int)
-check guess answer = (2, 1)
+check guess answer = undefined
