@@ -43,16 +43,18 @@ doGuess = do
             let checked = check guess solution
             liftIO $ putStrLn $ show checked
             case checked of
-                (4, 0) -> do
-                    liftIO $ putStrLn $ show solution
-                _ -> if numTries < numAllowedTries then do
-                         modify $ fmap (+1)
-                         doGuess
-                     else do
-                         liftIO $ putStrLn $ show solution
+                (4, 0) ->
+                    return ()
+                _ ->
+                    if numTries < numAllowedTries then do
+                        modify $ fmap (+1)
+                        doGuess
+                    else
+                        return ()
         Failure _ -> do
             doGuess
 
 main = do
     execStateT doGuess (solution, 1)
+    putStrLn $ show solution
     return ()
