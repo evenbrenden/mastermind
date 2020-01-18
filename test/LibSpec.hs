@@ -19,27 +19,39 @@ spec = do
     it "GBRP YYGG -> (0, 1)" $ do
         check (Green, Blue, Red, Pink) (Yellow, Yellow, Green, Green) `shouldBe` (0, 1)
 
+    it "GBRP TTTP -> (1, 0)" $ do
+        check (Green, Blue, Red, Pink) (Turkis, Turkis, Turkis, Pink) `shouldBe` (1, 0)
+
     it "GBRP PRRY -> (1, 1)" $ do
         check (Green, Blue, Red, Pink) (Pink, Red, Red, Yellow) `shouldBe` (1, 1)
 
     it "GBRP GPGY -> (1, 1)" $ do
         check (Green, Blue, Red, Pink) (Green, Pink, Green, Yellow) `shouldBe` (1, 1)
 
-    it "GBRP RRPY -> (1, 1)" $ do
-        check (Green, Blue, Red, Pink) (Red, Red, Pink, Yellow) `shouldBe` (1, 1)
+    it "GBRP RRPY -> (0, 2)" $ do
+        check (Green, Blue, Red, Pink) (Red, Red, Pink, Yellow) `shouldBe` (0, 2)
+
+    it "RRGG RRYY -> (2, 0)" $ do
+        check (Red, Red, Green, Green) (Red, Red, Yellow, Yellow) `shouldBe` (2, 0)
 
     it "Can not be more right than four" $ do
-        property $ \g a -> sumResult (check g a) <= 4
+        property $ \guess answer -> sumResult (check guess answer) <= 4
 
     it "Can not be more wrong than zero" $ do
-        property $ \g a -> sumResult (check g a) >= 0
+        property $ \guess answer -> sumResult (check guess answer) >= 0
 
     it "Unicolor rows is either all right or all wrong" $ do
-        property $ \g a ->
-            let checked = check (unicolorRow g) (unicolorRow a)
+        property $ \guess answer ->
+            let checked = check (unicolorRow guess) (unicolorRow answer)
             in checked == (0, 0) || checked == (4, 0)
 
-    it "Correct guess => 4 positions right else less" $ do
-        property $ \g a ->
-            let checked = check g a
-            in if g == a then checked == (4, 0) else fst checked < 4
+    it "Correct guess gives 4 positions right else less" $ do
+        property $ \guess answer ->
+            let checked = check guess answer
+            in if guess == answer then checked == (4, 0) else fst checked < 4
+
+    it "Argument order does not matter" $ do
+        property $ \guess answer ->
+            let checkedXY = check guess answer
+                checkedYX = check answer guess
+            in checkedXY == checkedYX
