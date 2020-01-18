@@ -36,10 +36,10 @@ doGuess :: StateT (Row, Int) IO ()
 doGuess = do
     input <- liftIO getLine
     case parseRow input of
-        Success guess -> do
-            liftIO $ putStrLn $ show guess
+        Success aGuess -> do
+            liftIO $ putStrLn $ show aGuess
             (solution, numTries) <- get
-            let checked = check guess solution
+            let checked = check aGuess solution
             liftIO $ putStrLn $ show checked
             case checked of
                 (4, 0) ->
