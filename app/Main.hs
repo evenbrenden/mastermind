@@ -32,29 +32,29 @@ row = do
 
 parseRow = parseString row mempty
 
-doGuess :: StateT (Row, Int) IO ()
-doGuess = do
+doGuess :: Row -> StateT Int IO ()
+doGuess solution = do
     input <- liftIO getLine
     -- TODO handle parser failure...differently
     case parseRow input of
         Success guess -> do
             liftIO $ putStrLn $ show guess
-            (solution, numTries) <- get
             let checked = check guess solution
             liftIO $ putStrLn $ show checked
             case checked of
                 (4, 0) ->
                     return ()
-                _ ->
+                _ -> do
+                    numTries <- get
                     if numTries < numAllowedTries then do
-                        modify $ fmap (+1)
-                        doGuess
+                        modify (+1)
+                        doGuess solution
                     else
                         return ()
         Failure _ -> do
-            doGuess
+            doGuess solution
 
 main = do
-    execStateT doGuess (solution, 1)
+    execStateT (doGuess solution) 1
     putStrLn $ show solution
     return ()
