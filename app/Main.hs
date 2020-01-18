@@ -35,7 +35,6 @@ parseRow = parseString row mempty
 doGuess :: StateT (Row, Int) IO ()
 doGuess = do
     input <- liftIO getLine
-    -- TODO handle parser failure...differently
     case parseRow input of
         Success guess -> do
             liftIO $ putStrLn $ show guess
