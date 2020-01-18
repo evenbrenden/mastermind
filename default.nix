@@ -5,7 +5,7 @@ let
   inherit (nixpkgs) pkgs;
 
   f = { mkDerivation, base, hspec, hspec-discover, QuickCheck
-      , stdenv, transformers
+      , stdenv, transformers, trifecta
       }:
       mkDerivation {
         pname = "mastermind";
@@ -14,7 +14,7 @@ let
         isLibrary = true;
         isExecutable = true;
         libraryHaskellDepends = [ base ];
-        executableHaskellDepends = [ base transformers ];
+        executableHaskellDepends = [ base transformers trifecta ];
         testHaskellDepends = [ base hspec hspec-discover QuickCheck ];
         testToolDepends = [ hspec-discover ];
         license = "unknown";

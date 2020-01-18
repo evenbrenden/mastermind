@@ -19,6 +19,7 @@ executable mastermind
   build-depends:
       base < 5
     , transformers
+    , trifecta
     , mastermind
   default-language: Haskell2010
 
