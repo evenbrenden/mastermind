@@ -6,6 +6,10 @@ import Control.Applicative
 import Text.Trifecta
 import Lib
 
+-- TODO generate random solution
+solution = (Turkis, Turkis, Turkis, Turkis)
+numAllowedTries = 10
+
 color :: Parser Color
 color = do
     color' <- oneOf "RBGPYT"
@@ -31,8 +35,8 @@ parseRow = parseString row mempty
 doGuess :: StateT (Row, Int) IO ()
 doGuess = do
     input <- liftIO getLine
-    let parsed = parseRow input
-    case parsed of
+    -- TODO handle parser failure...differently
+    case parseRow input of
         Success guess -> do
             liftIO $ putStrLn $ show guess
             (solution, numTries) <- get
@@ -41,17 +45,14 @@ doGuess = do
             case checked of
                 (4, 0) -> do
                     liftIO $ putStrLn $ show solution
-                _ -> case numTries < 10 of
-                    True -> do
-                        modify $ fmap (+1)
-                        doGuess
-                    False -> do
-                        liftIO $ putStrLn $ show solution
+                _ -> if numTries < numAllowedTries then do
+                         modify $ fmap (+1)
+                         doGuess
+                     else do
+                         liftIO $ putStrLn $ show solution
         Failure _ -> do
             doGuess
 
-main :: IO ()
 main = do
-    let solution = (Yellow, Red, Green, Blue)
-    execStateT doGuess (solution, 0)
+    execStateT doGuess (solution, 1)
     return ()
