@@ -3,7 +3,7 @@ module Main where
 import Control.Monad.Trans.State
 import Control.Monad.IO.Class
 import Control.Applicative
-import Text.Trifecta
+import Text.Trifecta as T
 import MmLib
 
 numAllowedTries = 10
@@ -28,6 +28,7 @@ row = do
     d <- color
     return (a, b, c, d)
 
+parseRow :: String -> T.Result Row
 parseRow = parseString row mempty
 
 doGuess :: StateT (Row, Int) IO ()
