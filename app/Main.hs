@@ -40,7 +40,7 @@ doGuess = do
             let checked = check aGuess solution
             liftIO $ putStrLn $ show checked
             case checked of
-                (4, 0) ->
+                Result { numRightPositions = 4, numRightColors = 0 } ->
                     return ()
                 _ ->
                     if numTries < numAllowedTries then do
