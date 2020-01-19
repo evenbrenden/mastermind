@@ -13,7 +13,7 @@ let
         src = ./.;
         isLibrary = true;
         isExecutable = true;
-        libraryHaskellDepends = [ base random ];
+        libraryHaskellDepends = [ base random trifecta ];
         executableHaskellDepends = [ base transformers trifecta ];
         testHaskellDepends = [ base hspec hspec-discover QuickCheck ];
         testToolDepends = [ hspec-discover ];
