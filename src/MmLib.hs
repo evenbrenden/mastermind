@@ -1,12 +1,26 @@
-module Lib where
+module MmLib where
 
 import Data.List
+import System.Random
 
 data Color =
     Red | Blue | Green | Pink | Yellow | Turkis
-    deriving (Eq, Show)
+    deriving (Eq, Show, Enum, Bounded)
+
+instance Random Color where
+    randomR (lo, hi) gen = (toEnum val, gen')
+        where (val, gen') = randomR (fromEnum lo, fromEnum hi) gen
+    random = randomR (minBound, maxBound)
 
 type Row = (Color, Color, Color, Color)
+
+randomRow :: IO Row
+randomRow = do
+    a <- randomIO
+    b <- randomIO
+    c <- randomIO
+    d <- randomIO
+    return (a, b, c, d)
 
 intersectWithoutDuplicates :: Eq a => [a] -> [a] -> [a]
 intersectWithoutDuplicates xs ys = xs \\ (xs \\ ys)

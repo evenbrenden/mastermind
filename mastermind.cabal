@@ -5,11 +5,12 @@ build-type: Simple
 
 library
   exposed-modules:
-      Lib
+      MmLib
   hs-source-dirs:
       src
   build-depends:
       base < 5
+    , random
   default-language: Haskell2010
 
 executable mastermind
@@ -27,7 +28,7 @@ test-suite test-mm
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      LibSpec
+      MmLibSpec
   hs-source-dirs:
       test
   build-depends:

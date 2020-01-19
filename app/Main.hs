@@ -4,10 +4,8 @@ import Control.Monad.Trans.State
 import Control.Monad.IO.Class
 import Control.Applicative
 import Text.Trifecta
-import Lib
+import MmLib
 
--- TODO generate random solution
-solution = (Turkis, Turkis, Turkis, Turkis)
 numAllowedTries = 10
 
 color :: Parser Color
@@ -54,6 +52,7 @@ doGuess = do
             doGuess
 
 main = do
+    solution <- randomRow
     execStateT doGuess (solution, 1)
     putStrLn $ show solution
     return ()
