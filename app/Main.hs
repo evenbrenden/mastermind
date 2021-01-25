@@ -40,15 +40,14 @@ doGuess = do
             (solution, numTries) <- get
             let checked = check aGuess solution
             liftIO $ putStrLn $ show checked
-            case checked of
-                Result { numRightPositions = 4, numRightColors = 0 } -> -- Right answer
+            if checked == Result { numRightPositions = 4, numRightColors = 0 } then -- Right answer
+                return ()
+            else
+                if numTries < numAllowedTries then do -- Wrong answer, more tries left
+                    modify $ fmap (+1)
+                    doGuess
+                else -- Wrong answer, no tries left
                     return ()
-                _ ->
-                    if numTries < numAllowedTries then do -- Wrong answer, more tries left
-                        modify $ fmap (+1)
-                        doGuess
-                    else -- Wrong answer, no tries left
-                        return ()
         Failure _ -> do -- Parse failure
             doGuess
 
