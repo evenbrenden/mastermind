@@ -35,21 +35,21 @@ doGuess :: StateT (Row, Int) IO ()
 doGuess = do
     input <- liftIO getLine
     case parseRow input of
-        Success aGuess -> do
+        Success aGuess -> do -- Parse success
             liftIO $ putStrLn $ show aGuess
             (solution, numTries) <- get
             let checked = check aGuess solution
             liftIO $ putStrLn $ show checked
             case checked of
-                Result { numRightPositions = 4, numRightColors = 0 } ->
+                Result { numRightPositions = 4, numRightColors = 0 } -> -- Right answer
                     return ()
                 _ ->
-                    if numTries < numAllowedTries then do
+                    if numTries < numAllowedTries then do -- Wrong answer, more tries left
                         modify $ fmap (+1)
                         doGuess
-                    else
+                    else -- Wrong answer, no tries left
                         return ()
-        Failure _ -> do
+        Failure _ -> do -- Parse failure
             doGuess
 
 main = do
