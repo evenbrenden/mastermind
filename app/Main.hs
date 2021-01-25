@@ -49,6 +49,7 @@ doGuess = do
                 else -- Wrong answer, no tries left
                     return ()
         Failure _ -> do -- Parse failure
+            liftIO $ putStrLn $ "Invalid input"
             doGuess
 
 main = do
