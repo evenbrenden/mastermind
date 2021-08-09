@@ -35,6 +35,7 @@ test-suite test-mm
       base < 5
     , mastermind
     , QuickCheck
+    , quickspec
     , hspec
     , hspec-discover
   default-language: Haskell2010

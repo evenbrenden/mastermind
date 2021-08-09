@@ -5,14 +5,16 @@ import System.Random
 
 data Color =
     Red | Blue | Green | Pink | Yellow | Turkis
-    deriving (Eq, Show, Enum, Bounded)
+    deriving (Eq, Ord, Show, Enum, Bounded)
 
 instance Random Color where
     randomR (lo, hi) gen = (toEnum val, gen')
         where (val, gen') = randomR (fromEnum lo, fromEnum hi) gen
     random = randomR (minBound, maxBound)
 
-type Row = (Color, Color, Color, Color)
+data Row =
+    Row (Color, Color, Color, Color)
+    deriving (Eq, Ord, Show)
 
 randomRow :: IO Row
 randomRow = do
@@ -20,7 +22,7 @@ randomRow = do
     b <- randomIO
     c <- randomIO
     d <- randomIO
-    return (a, b, c, d)
+    return $ Row (a, b, c, d)
 
 intersectWithoutDuplicates :: Eq a => [a] -> [a] -> [a]
 intersectWithoutDuplicates xs ys = xs \\ (xs \\ ys)
@@ -28,10 +30,10 @@ intersectWithoutDuplicates xs ys = xs \\ (xs \\ ys)
 data Result = Result {
     numRightPositions :: Int
   , numRightColors :: Int
-} deriving (Eq, Show)
+} deriving (Eq, Ord, Show)
 
 check :: Row -> Row -> Result
-check (a, b, c, d) (e, f, g, h) =
+check (Row (a, b, c, d)) (Row (e, f, g, h)) =
     let xs = [ a, b, c, d ]
         ys = [ e, f, g, h ]
         zipped = zip xs ys

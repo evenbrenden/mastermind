@@ -1,11 +1,11 @@
-{ nixpkgs ? import <nixpkgs> {}, compiler ? "default", doBenchmark ? false }:
+{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/c3792f6cddc71ba348e018406f125503d088c405.tar.gz") {}
+, compiler ? "default"
+, doBenchmark ? false }:
 
 let
 
-  inherit (nixpkgs) pkgs;
-
-  f = { mkDerivation, base, hspec, hspec-discover, QuickCheck
-      , random, stdenv, transformers, trifecta
+  f = { mkDerivation, base, hspec, hspec-discover, lib, QuickCheck
+      , quickspec, random, transformers, trifecta
       }:
       mkDerivation {
         pname = "mastermind";
@@ -15,10 +15,12 @@ let
         isExecutable = true;
         libraryHaskellDepends = [ base random ];
         executableHaskellDepends = [ base transformers trifecta ];
-        testHaskellDepends = [ base hspec hspec-discover QuickCheck ];
+        testHaskellDepends = [
+          base hspec hspec-discover QuickCheck quickspec
+        ];
         testToolDepends = [ hspec-discover ];
         license = "unknown";
-        hydraPlatforms = stdenv.lib.platforms.none;
+        hydraPlatforms = lib.platforms.none;
       };
 
   haskellPackages = if compiler == "default"

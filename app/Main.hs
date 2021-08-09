@@ -26,7 +26,7 @@ row = do
     b <- color
     c <- color
     d <- color
-    return (a, b, c, d)
+    return $ Row (a, b, c, d)
 
 parseRow :: String -> T.Result Row
 parseRow = parseString row mempty
