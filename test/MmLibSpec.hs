@@ -1,8 +1,8 @@
 module MmLibSpec where
 
+import MmLib
 import Test.Hspec
 import Test.QuickCheck
-import MmLib
 
 instance Arbitrary Color where
     arbitrary =

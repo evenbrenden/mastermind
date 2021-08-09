@@ -1,10 +1,10 @@
 module Main where
 
-import Control.Monad.Trans.State
-import Control.Monad.IO.Class
 import Control.Applicative
-import Text.Trifecta as T
+import Control.Monad.IO.Class
+import Control.Monad.Trans.State
 import MmLib
+import Text.Trifecta as T
 
 numAllowedTries = 10
 
