@@ -1,7 +1,7 @@
 module MmLibSpec where
 
 import Data.Proxy
-import QuickSpec (con, quickSpec, monoType)
+import QuickSpec (con, quickSpec, monoType, withMaxTests)
 import MmLib
 import Test.Hspec (Spec, describe, it, shouldBe)
 import Test.QuickCheck (Arbitrary, arbitrary, elements, property)
@@ -29,6 +29,7 @@ findLaws = quickSpec
   [ con "check" (check :: Row -> Row -> Result)
   , monoType (Proxy :: Proxy Row)
   , monoType (Proxy :: Proxy Result)
+  , withMaxTests 1000000
   ]
 
 sumResult Result { numRightPositions = p, numRightColors = c } = p + c
