@@ -1,11 +1,13 @@
 module Main where
 
-import Control.Applicative
-import Control.Monad.IO.Class
-import Control.Monad.Trans.State
+import Control.Applicative ( Alternative(empty) )
+import Control.Monad ( when )
+import Control.Monad.IO.Class ( MonadIO(liftIO) )
+import Control.Monad.Trans.State ( execStateT, get, modify, StateT )
+import Text.Trifecta as T ( oneOf, parseString, Parser, Result(..) )
 import MmLib
-import Text.Trifecta as T
 
+numAllowedTries :: Int
 numAllowedTries = 10
 
 color :: Parser Color
@@ -35,25 +37,23 @@ doGuess :: StateT (Row, Int) IO ()
 doGuess = do
     input <- liftIO getLine
     case parseRow input of
-        Success aGuess -> do -- Parse success
-            liftIO $ putStrLn $ show aGuess
+        Success aGuess -> do
+            liftIO $ print aGuess
             (solution, numTries) <- get
             let checked = check aGuess solution
-            liftIO $ putStrLn $ show checked
-            if checked == Result { numRightPositions = 4, numRightColors = 0 } then -- Right answer
-                return ()
-            else
-                if numTries < numAllowedTries then do -- Wrong answer, more tries left
-                    modify $ fmap (+1)
-                    doGuess
-                else -- Wrong answer, no tries left
-                    return ()
-        Failure _ -> do -- Parse failure
-            liftIO $ putStrLn $ "Invalid input"
+            liftIO $ print checked
+            let isWrongAnswer = checked /= rightAnswer
+            let hasMoreTries = numTries < numAllowedTries
+            when (isWrongAnswer && hasMoreTries) $ do
+                modify $ fmap (+1)
+                doGuess
+        Failure _ -> do
+            liftIO $ print "Invalid input"
             doGuess
 
+main :: IO ()
 main = do
     solution <- randomRow
     execStateT doGuess (solution, 1)
-    putStrLn $ show solution
+    print solution
     return ()

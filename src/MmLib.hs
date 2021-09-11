@@ -1,7 +1,7 @@
 module MmLib where
 
-import Data.List
-import System.Random
+import Data.List ( (\\) )
+import System.Random ( Random(randomIO, random, randomR) )
 
 data Color =
     Red | Blue | Green | Pink | Yellow | Turkis
@@ -32,13 +32,16 @@ data Result = Result {
   , numRightColors :: Int
 } deriving (Eq, Ord, Show)
 
+rightAnswer :: Result
+rightAnswer = Result { numRightPositions = 4, numRightColors = 0 }
+
 check :: Row -> Row -> Result
 check (Row (a, b, c, d)) (Row (e, f, g, h)) =
     let xs = [ a, b, c, d ]
         ys = [ e, f, g, h ]
         zipped = zip xs ys
-        rightPositions = filter (\x -> fst x == snd x) $ zipped
-        wrongPositions = filter (\x -> fst x /= snd x) $ zipped
+        rightPositions = filter (uncurry (==)) zipped
+        wrongPositions = filter (uncurry (/=)) zipped
         wrongPositionsXs = map fst wrongPositions
         wrongPositionsYs = map snd wrongPositions
         rightColors = intersectWithoutDuplicates wrongPositionsXs wrongPositionsYs

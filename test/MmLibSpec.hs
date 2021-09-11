@@ -2,9 +2,9 @@ module MmLibSpec where
 
 import Data.Proxy
 import QuickSpec (con, quickSpec, monoType, withMaxTests)
-import MmLib
 import Test.Hspec (Spec, describe, it, shouldBe)
 import Test.QuickCheck (Arbitrary, arbitrary, elements, property)
+import MmLib
 
 instance Arbitrary Color where
     arbitrary =
@@ -32,8 +32,10 @@ findLaws = quickSpec
   , withMaxTests 1000000
   ]
 
+sumResult :: Result -> Int
 sumResult Result { numRightPositions = p, numRightColors = c } = p + c
 
+unicolorRow :: Color -> Row
 unicolorRow color = Row (color, color, color, color)
 
 spec :: Spec
