@@ -53,6 +53,7 @@ doGuess = do
 
 main :: IO ()
 main = do
+    putStrLn "Take a guess!"
     solution <- randomRow
     execStateT doGuess (solution, 1)
     print solution
