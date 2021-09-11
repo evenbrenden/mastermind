@@ -1,0 +1,9 @@
+cradle:
+  cabal:
+    components:
+    - path: "./src"
+      component: "lib:mastermind"
+    - path: "./app"
+      component: "exe:mastermind"
+    - path: "./test"
+      component: "test:test-mm"
