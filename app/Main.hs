@@ -1,26 +1,36 @@
 module Main where
 
-import Control.Applicative ( Alternative(empty) )
+import Control.Applicative ( (<|>), Alternative(empty) )
 import Control.Monad ( when )
 import Control.Monad.IO.Class ( MonadIO(liftIO) )
 import Control.Monad.Trans.State ( execStateT, get, modify, StateT )
-import Text.Trifecta as T ( oneOf, parseString, Parser, Result(..) )
+import Text.Trifecta as T ( char, oneOf, parseString, Parser, Result(..) )
 import MmLib
 
 numAllowedTries :: Int
 numAllowedTries = 10
 
+red :: Parser Color
+red = char 'R' >> return Red
+
+blue :: Parser Color
+blue = char 'B' >> return Blue
+
+green :: Parser Color
+green = char 'G' >> return Green
+
+pink :: Parser Color
+pink = char 'P' >> return Pink
+
+yellow :: Parser Color
+yellow = char 'Y' >> return Yellow
+
+turkis :: Parser Color
+turkis = char 'T' >> return Turkis
+
 color :: Parser Color
-color = do
-    color' <- oneOf "RBGPYT"
-    case color' of
-        'R' -> return Red
-        'B' -> return Blue
-        'G' -> return Green
-        'P' -> return Pink
-        'Y' -> return Yellow
-        'T' -> return Turkis
-        _ -> empty
+color =
+    red <|> blue <|> green <|> pink <|> yellow <|> turkis
 
 row :: Parser Row
 row = do
